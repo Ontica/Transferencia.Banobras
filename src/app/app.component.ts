@@ -3,6 +3,16 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 
+interface Payload {
+  status: string;
+  data: any;
+}
+
+interface Auxiliar {
+  number: string;
+  name: string;
+}
+
 @Component(
   {
     selector: 'app-root',
@@ -10,11 +20,13 @@ import { Subscription } from 'rxjs';
   })
 export class AppComponent implements OnInit, OnDestroy {
 
-  tablaAuxiliares = 'Aquí va la tabla de auxiliares';
+  title: string = 'Sesiones de transferencia tecnológica Banobras';
 
-  title = 'Sesiones de transferencia tecnológica Banobras';
+  year: number = 2021;
 
-  year = 2021;
+  auxiliares: Auxiliar[] = [];
+
+  keywords: string = 'Mesa';
 
   subscription: Subscription | undefined;
 
@@ -29,24 +41,26 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
-    this.setTablaAuxiliares();
+    // this.setTablaAuxiliares(this.keywords);
   }
 
+  public search() {
+    this.setTablaAuxiliares(this.keywords);
+  }
 
-  private setTablaAuxiliares(): void {
+  private setTablaAuxiliares(keywords: string): void {
     const accountsChartUID = 'b2328e67-3f2e-45b9-b1f6-93ef6292204e';
-    const keywords = 'Cristina lechuga García';
 
     const url = `http://172.27.207.97/sicofin/api/v2/financial-accounting` +
                 `/${accountsChartUID}/subsidiary-accounts/${keywords}`;
 
     console.log('antes del get');
 
-    this.subscription = this.httpClient.get(url).subscribe(
-      data => {
-        console.log(data);
+    this.subscription = this.httpClient.get<Payload>(url).subscribe(
+      result => {
+        console.log(result);
         console.log('regreso satisfactorio');
-        this.tablaAuxiliares = JSON.stringify(data);
+        this.auxiliares = result.data;
       },
       error => console.log('hubo un problema en la llamada a la API', error)
     );

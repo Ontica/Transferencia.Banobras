@@ -3,6 +3,12 @@
 Tabla de auxiliares
 <br><br>
 
-{{tablaAuxiliares}}
+Buscar: <input type="text" [(ngModel)]="keywords">
+
+<button (click)="search()">Buscar</button>
+{{auxiliares.length}} encontrados.<br>
+<ul>
+  <li *ngFor="let auxiliar of auxiliares">{{ auxiliar.number }} - {{ auxiliar.name }}</li>
+</ul>
 
 <router-outlet></router-outlet>

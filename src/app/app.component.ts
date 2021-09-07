@@ -2,16 +2,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
+import { Auxiliar } from './models/auxiliares';
+import { DataAuxiliares } from './data/data-auxiliares';
 
-interface Payload {
-  status: string;
-  data: any;
-}
-
-interface Auxiliar {
-  number: string;
-  name: string;
-}
 
 @Component(
   {
@@ -22,7 +15,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   title: string = 'Sesiones de transferencia tecnológica Banobras';
 
-  year: number = 2021;
+  year: number = 2018;
 
   auxiliares: Auxiliar[] = [];
 
@@ -30,7 +23,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
   subscription: Subscription | undefined;
 
-  constructor(private httpClient: HttpClient) {}
+  dataAuxiliares: DataAuxiliares;
+
+  constructor(private httpClient: HttpClient) {
+    this.dataAuxiliares = new DataAuxiliares(this.httpClient);
+  }
 
 
   ngOnDestroy(): void {
@@ -49,23 +46,12 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private setTablaAuxiliares(keywords: string): void {
-    const accountsChartUID = 'b2328e67-3f2e-45b9-b1f6-93ef6292204e';
-
-    const url = `http://172.27.207.97/sicofin/api/v2/financial-accounting` +
-                `/${accountsChartUID}/subsidiary-accounts/${keywords}`;
-
-    console.log('antes del get');
-
-    this.subscription = this.httpClient.get<Payload>(url).subscribe(
+    this.subscription = this.dataAuxiliares.getTablaAuxiliares(keywords).subscribe(
       result => {
-        console.log(result);
-        console.log('regreso satisfactorio');
-        this.auxiliares = result.data;
+        this.auxiliares = result;
       },
       error => console.log('hubo un problema en la llamada a la API', error)
     );
-
-    console.log('después del get');
   }
 
   public nextYear(): number {

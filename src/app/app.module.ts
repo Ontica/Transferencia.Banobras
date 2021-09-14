@@ -8,11 +8,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { DataServicesModule } from './data/data-services.module';
+import { AuxiliaresComponent } from './views/auxiliares.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
+    AuxiliaresComponent,
   ],
 
   imports: [

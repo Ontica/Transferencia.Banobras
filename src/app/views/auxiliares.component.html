@@ -1,0 +1,13 @@
+<br><br>
+{{keywords}}
+<br><br>
+Tabla de auxiliares
+<br><br>
+
+Buscar: <input type="text" [(ngModel)]="keywords">
+
+<button (click)="search()">Buscar</button>
+{{auxiliares.length}} encontrados.<br>
+<ul>
+  <li *ngFor="let auxiliar of auxiliares">{{ auxiliar.number }} - {{ auxiliar.name }}</li>
+</ul>
